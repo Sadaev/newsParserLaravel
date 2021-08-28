@@ -5,9 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class News extends Model
+class RequestLogsModel extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'link', 'publication_date', 'short_description', 'author', 'image'];
+    protected $fillable = ['created_at', 'request_method', 'request_url', 'response_http_code', 'response_body'];
 }
