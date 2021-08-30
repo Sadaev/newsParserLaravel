@@ -1,4 +1,5 @@
 <?php
+namespace App\Dto;
 
 use App\Dto\BaseDto;
 

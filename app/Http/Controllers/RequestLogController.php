@@ -3,11 +3,17 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use RequestLogService;
+use App\Services\RequestLogService;
 
 class RequestLogController extends Controller
 {
-    public function create($response, RequestLogService $requestLogService){
-        $requestLogService->create($response);
+//    private static RequestLogService $requestLogService;
+//
+//    public function __construct(RequestLogService $requestLogService){
+//        self::$requestLogService = $requestLogService;
+//    }
+
+    public static function create($response, RequestLogService $requestLogService){
+        return $requestLogService->create($response);
     }
 }

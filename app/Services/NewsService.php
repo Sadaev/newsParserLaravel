@@ -1,6 +1,8 @@
 <?php
+namespace App\Services;
 
 use App\Models\NewsModel;
+use App\Dto\NewsCreateDto;
 
 class NewsService
 {

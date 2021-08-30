@@ -22,4 +22,4 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
 
-Route::get('/rssparser', [RssParserController::class, 'parser']);
+Route::get('rss-parser', [RssParserController::class, 'parser']);

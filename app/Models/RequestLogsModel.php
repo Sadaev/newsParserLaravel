@@ -9,5 +9,6 @@ class RequestLogsModel extends Model
 {
     use HasFactory;
 
+    protected $table = "requestlog";
     protected $fillable = ['created_at', 'request_method', 'request_url', 'response_http_code', 'response_body'];
 }

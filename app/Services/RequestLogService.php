@@ -1,6 +1,8 @@
 <?php
+namespace App\Services;
 
 use App\Models\RequestLogsModel;
+use App\Dto\RequestLogCreateDto;
 
 class RequestLogService
 {

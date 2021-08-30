@@ -1,14 +1,20 @@
 <?php
+namespace App\Services;
 
+use App\Dto\NewsCreateDto;
+use App\Dto\RequestLogCreateDto;
+use Carbon\Traits\Date;
 use GuzzleHttp\Client;
-use App\Models\NewsModel;
 use GuzzleHttp\Exception\GuzzleException;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\ResponseInterface;
 use App\Http\Controllers\NewsController;
-use App\Http\Controllers\RequestLogController;
+use SimpleXMLElement;
 
-class ParserRssService extends Service
+use DateTime;
+use function Livewire\str;
+
+class ParserRssService
 {
     public string $rss_url;
     public StreamInterface $rss_body;
@@ -34,7 +40,7 @@ class ParserRssService extends Service
     /**
      * @throws GuzzleException
      */
-    public function parseRssFeedByUrl(string $url): void
+    public function parseRssFeedByUrl(string $url): bool
     {
         $this->rss_url = $url;
         $this->rss_body = $this->getRssData();
@@ -44,6 +50,8 @@ class ParserRssService extends Service
         $news = $this->parseRss($rss);
 
         $this->saveNews($news);
+
+        return true;
 
     }
 
@@ -74,18 +82,45 @@ class ParserRssService extends Service
 
     }
 
+    /**
+     * @throws \Spatie\DataTransferObject\Exceptions\UnknownProperties
+     */
     function saveRequest(ResponseInterface $response){
-        return RequestLogController::create([
-            "request_url" => $this->rss_url,
-            "request_method" => $this->method,
-            "response_http_code" => $response->getStatusCode(), // 200
-            "response_body" => $response->getBody(),
-        ]);
+        $data = [
+            "request_method" => $this->method ?? '',
+            "request_url" => $this->rss_url ?? '',
+            "response_body" => $response->getBody() ?? '',
+            "response_http_code" => $response->getStatusCode() ?? '',
+        ];
+
+        $requestDto = new RequestLogCreateDto($data);
+        $requestLogService = new RequestLogService();
+
+        return $requestLogService->create($requestDto);
     }
 
+    /**
+     * @throws \Spatie\DataTransferObject\Exceptions\UnknownProperties
+     * @throws \Exception
+     */
     function saveNews(array $news){
+
+        $newsService = new NewsService();
+
+
         foreach($news as $item){
-            NewsController::create($item);
+            $data = [
+                'title' => $item['title'],
+                'link' => $item['link'],
+                'author' => $item['author'],
+                'image' => $item['image'],
+                'pubDate' => new DateTime($item['pubDate']),
+                'description' => $item['description'],
+            ];
+
+            $newsCreateDto = new NewsCreateDto($data);
+
+            $newsService->create($newsCreateDto);
         }
     }
 

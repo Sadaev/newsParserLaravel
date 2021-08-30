@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Dto;
 
 use Illuminate\Contracts\Support\Arrayable;

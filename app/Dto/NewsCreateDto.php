@@ -1,6 +1,9 @@
 <?php
+namespace App\Dto;
 
 use App\Dto\BaseDto;
+use DateTime;
+
 
 class NewsCreateDto extends BaseDto
 {
@@ -8,7 +11,7 @@ class NewsCreateDto extends BaseDto
 
     public string $link;
 
-    public string $auth;
+    public string $author;
 
     public string $image;
 
