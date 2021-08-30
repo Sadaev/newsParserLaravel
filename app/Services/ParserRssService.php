@@ -3,16 +3,13 @@ namespace App\Services;
 
 use App\Dto\NewsCreateDto;
 use App\Dto\RequestLogCreateDto;
-use Carbon\Traits\Date;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\ResponseInterface;
-use App\Http\Controllers\NewsController;
 use SimpleXMLElement;
 
 use DateTime;
-use function Livewire\str;
 
 class ParserRssService
 {
@@ -40,7 +37,7 @@ class ParserRssService
     /**
      * @throws GuzzleException
      */
-    public function parseRssFeedByUrl(string $url): bool
+    public function parseRssFeedByUrl(string $url): int
     {
         $this->rss_url = $url;
         $this->rss_body = $this->getRssData();
@@ -51,8 +48,7 @@ class ParserRssService
 
         $this->saveNews($news);
 
-        return true;
-
+        return count($news);
     }
 
     public function parseRss($rss): array
@@ -76,10 +72,6 @@ class ParserRssService
         }
 
         return $items;
-    }
-
-    public function rss() {
-
     }
 
     /**

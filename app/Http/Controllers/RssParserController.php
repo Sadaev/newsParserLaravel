@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\ParseRSS;
 use GuzzleHttp\Exception\GuzzleException;
 use Psr\Http\Message\StreamInterface;
 use App\Services\ParserRssService;
@@ -19,20 +20,9 @@ class RssParserController extends Controller
     /**
      * @throws GuzzleException
      */
-    public function parser(ParserRssService $parserRssService): bool
+    public function parser(ParserRssService $parserRssService): void
     {
-        $response = $parserRssService->parseRssFeedByUrl($this->rss_url);
-
-        return $response;
-    }
-
-    public function saveRequestLog() {
-        return RequestLogController::create([
-            "request_url" => $this->rss_url,
-            "request_method" => $this->method,
-            "response_http_code" => $response->getStatusCode(), // 200
-            "response_body" => $response->getBody(),
-        ]);
+        ParseRSS::dispatch();
     }
 }
 
